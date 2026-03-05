@@ -130,7 +130,7 @@ async function main() {
   const adminUser = await prisma.user.create({
     data: {
       name: 'Admin',
-      phone: '+998900000001',
+      phone: '+998900152601',
       role: UserRole.ADMIN,
       status: UserStatus.ACTIVE,
       location: 'Toshkent',
@@ -193,7 +193,7 @@ async function main() {
   console.log('  TEST LOGIN CREDENTIALS:');
   console.log('  ─────────────────────────────────────');
   console.log('  👑 ADMIN panel:');
-  console.log('     Phone: +998900000001');
+  console.log('     Phone: +998900152601');
   console.log('');
   console.log('  🔧 MASTER (Usta) panel:');
   console.log('     Phone: +998900000002');
