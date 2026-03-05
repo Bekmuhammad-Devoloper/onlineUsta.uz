@@ -103,6 +103,7 @@ model User {
     avatar      String?
     deviceId    String?
     fcmToken    String? // Firebase Cloud Messaging token
+    telegramChatId String? // Telegram bot chat ID
     lastLoginAt DateTime?
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt

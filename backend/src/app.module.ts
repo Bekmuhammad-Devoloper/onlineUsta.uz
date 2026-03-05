@@ -13,6 +13,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { SmsModule } from './sms/sms.module';
 import { UploadModule } from './upload/upload.module';
 import { CategoriesModule } from './categories/categories.module';
+import { BotModule } from './bot/bot.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { CategoriesModule } from './categories/categories.module';
     SmsModule,
     UploadModule,
     CategoriesModule,
+    BotModule,
   ],
 })
 export class AppModule {}
