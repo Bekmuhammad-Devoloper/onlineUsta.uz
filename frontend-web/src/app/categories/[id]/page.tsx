@@ -68,10 +68,6 @@ const catColors: Record<string, { text: string; light: string; gradient: string 
   "Telefon ta'mirlash": { text: "text-emerald-600", light: "bg-emerald-50", gradient: "from-emerald-500 to-teal-600" },
   "Avtomobil ta'mirlash": { text: "text-slate-600", light: "bg-slate-50", gradient: "from-slate-500 to-slate-700" },
   "Bog' ishlari": { text: "text-green-600", light: "bg-green-50", gradient: "from-green-500 to-emerald-600" },
-  "Eshik o'rnatish": { text: "text-amber-600", light: "bg-amber-50", gradient: "from-amber-500 to-amber-700" },
-  "Suv tozalash": { text: "text-cyan-600", light: "bg-cyan-50", gradient: "from-cyan-500 to-blue-600" },
-  "Kamera o'rnatish": { text: "text-violet-600", light: "bg-violet-50", gradient: "from-violet-500 to-violet-700" },
-  "Devor qog'ozi": { text: "text-fuchsia-600", light: "bg-fuchsia-50", gradient: "from-fuchsia-500 to-pink-600" },
 };
 
 const defaultColor = { text: "text-blue-600", light: "bg-blue-50", gradient: "from-blue-500 to-blue-600" };
