@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class UploadService {
   private uploadDir: string;
 
-  constructor() {
+  constructor(private config: ConfigService) {
     this.uploadDir = path.join(process.cwd(), 'uploads');
     if (!fs.existsSync(this.uploadDir)) {
       fs.mkdirSync(this.uploadDir, { recursive: true });
@@ -21,8 +22,8 @@ export class UploadService {
 
     fs.writeFileSync(filePath, file.buffer);
 
-    const port = process.env.PORT || 4000;
-    return `http://localhost:${port}/uploads/${filename}`;
+    const appUrl = this.config.get<string>('APP_URL', `http://localhost:${this.config.get('PORT', 4000)}`);
+    return `${appUrl}/uploads/${filename}`;
   }
 
   async deleteFile(url: string): Promise<void> {
