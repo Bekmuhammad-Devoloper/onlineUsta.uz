@@ -29,19 +29,21 @@ const categoryGifs: Record<string, string> = {
   "Maishiy texnika": "/icons/home-appliance.gif",
   "Tozalash": "/icons/cleaning.gif",
 
-  // --- Yangi unique GIF fayllar (dublikat bo'lganlar o'rniga) ---
-  "Qurilish": "/icons/construction.gif",           // Avval: encryption.gif (dublikat)
-  "Eshik o'rnatish": "/icons/door.gif",             // Avval: carpentry.gif (dublikat)
-  "Kalit usta": "/icons/key.gif",                   // Avval: encryption.gif (dublikat)
-  "Dezinfeksiya": "/icons/disinfection.gif",         // Avval: cleaning.gif (dublikat)
-  "Mebel yig'ish": "/icons/furniture.gif",           // Avval: carpentry.gif (dublikat)
-  "Ko'chirish": "/icons/moving-truck.gif",           // Avval: home repair.gif (dublikat)
-  "Lift ta'mirlash": "/icons/elevator.gif",          // Avval: home repair.gif (dublikat)
-  "Internet va tarmoq": "/icons/wifi-network.gif",   // Avval: camera installation.gif (dublikat)
-  "Kompyuter ta'mirlash": "/icons/computer-repair.gif", // Avval: home-appliance.gif (dublikat)
-  "Telefon ta'mirlash": "/icons/phone-repair.gif",   // Avval: home-appliance.gif (dublikat)
-  "Avtomobil ta'mirlash": "/icons/car-repair.gif",   // Avval: home repair.gif (dublikat)
-  "Bog' ishlari": "/icons/gardening.gif",            // Avval: cleaning.gif (dublikat)
+  // --- Yangi unique GIF fayllar ---
+  // Freepikdan yuklab /icons/ papkaga qo'yilgach, nomlarini almashtiring
+  // Hozircha mavjud eng mos iconlar ishlatilmoqda
+  "Qurilish": "/icons/encryption.gif",              // TODO: /icons/construction.gif yuklansin
+  "Eshik o'rnatish": "/icons/carpentry.gif",         // TODO: /icons/door.gif yuklansin
+  "Kalit usta": "/icons/encryption.gif",             // TODO: /icons/key.gif yuklansin
+  "Dezinfeksiya": "/icons/cleaning.gif",             // TODO: /icons/disinfection.gif yuklansin
+  "Mebel yig'ish": "/icons/carpentry.gif",           // TODO: /icons/furniture.gif yuklansin
+  "Ko'chirish": "/icons/home-repair.gif",            // TODO: /icons/moving-truck.gif yuklansin
+  "Lift ta'mirlash": "/icons/home-repair.gif",       // TODO: /icons/elevator.gif yuklansin
+  "Internet va tarmoq": "/icons/camera-installation.gif", // TODO: /icons/wifi-network.gif yuklansin
+  "Kompyuter ta'mirlash": "/icons/home-appliance.gif",    // TODO: /icons/computer-repair.gif yuklansin
+  "Telefon ta'mirlash": "/icons/home-appliance.gif",      // TODO: /icons/phone-repair.gif yuklansin
+  "Avtomobil ta'mirlash": "/icons/home-repair.gif",       // TODO: /icons/car-repair.gif yuklansin
+  "Bog' ishlari": "/icons/cleaning.gif",             // TODO: /icons/gardening.gif yuklansin
 };
 
 export function getCategoryGif(name: string): string {
