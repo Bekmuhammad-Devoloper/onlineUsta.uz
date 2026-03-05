@@ -57,6 +57,21 @@ const catColors: Record<string, { text: string; light: string; gradient: string 
   "Payvandlash": { text: "text-orange-600", light: "bg-orange-50", gradient: "from-orange-500 to-red-600" },
   "Loyiha va smeta": { text: "text-blue-600", light: "bg-blue-50", gradient: "from-blue-400 to-blue-600" },
   "Hovuz qurilishi": { text: "text-sky-600", light: "bg-sky-50", gradient: "from-sky-400 to-blue-600" },
+  // --- Qo'shimcha kategoriyalar ---
+  "Kalit usta": { text: "text-amber-600", light: "bg-amber-50", gradient: "from-amber-500 to-yellow-600" },
+  "Dezinfeksiya": { text: "text-red-600", light: "bg-red-50", gradient: "from-red-500 to-rose-600" },
+  "Mebel yig'ish": { text: "text-amber-600", light: "bg-amber-50", gradient: "from-amber-400 to-amber-600" },
+  "Ko'chirish": { text: "text-indigo-600", light: "bg-indigo-50", gradient: "from-indigo-500 to-indigo-700" },
+  "Lift ta'mirlash": { text: "text-gray-600", light: "bg-gray-50", gradient: "from-gray-500 to-gray-700" },
+  "Internet va tarmoq": { text: "text-blue-600", light: "bg-blue-50", gradient: "from-blue-500 to-cyan-600" },
+  "Kompyuter ta'mirlash": { text: "text-violet-600", light: "bg-violet-50", gradient: "from-violet-500 to-purple-600" },
+  "Telefon ta'mirlash": { text: "text-emerald-600", light: "bg-emerald-50", gradient: "from-emerald-500 to-teal-600" },
+  "Avtomobil ta'mirlash": { text: "text-slate-600", light: "bg-slate-50", gradient: "from-slate-500 to-slate-700" },
+  "Bog' ishlari": { text: "text-green-600", light: "bg-green-50", gradient: "from-green-500 to-emerald-600" },
+  "Eshik o'rnatish": { text: "text-amber-600", light: "bg-amber-50", gradient: "from-amber-500 to-amber-700" },
+  "Suv tozalash": { text: "text-cyan-600", light: "bg-cyan-50", gradient: "from-cyan-500 to-blue-600" },
+  "Kamera o'rnatish": { text: "text-violet-600", light: "bg-violet-50", gradient: "from-violet-500 to-violet-700" },
+  "Devor qog'ozi": { text: "text-fuchsia-600", light: "bg-fuchsia-50", gradient: "from-fuchsia-500 to-pink-600" },
 };
 
 const defaultColor = { text: "text-blue-600", light: "bg-blue-50", gradient: "from-blue-500 to-blue-600" };
@@ -82,6 +97,23 @@ const categoryServices: Record<string, string[]> = {
   "Issiqlik tizimi": ["Radiator o'rnatish", "Pol isitish", "Kotel ta'mirlash", "Isitish tizimi", "Quvurlar", "Nasos"],
   "Payvandlash": ["Metall payvandlash", "Darvoza yasash", "Panjara", "To'r yasash", "Metall kesish", "Konstruktsiya"],
   "Hovuz qurilishi": ["Hovuz qurish", "Hovuz ta'mirlash", "Suv tozalash", "Hammom ishlari", "Filtr tizimi", "Gidroizolyatsiya"],
+  // --- Qo'shimcha kategoriyalar ---
+  "Eshik o'rnatish": ["Kirish eshigi", "Ichki eshiklar", "Shluz eshik", "Eshik ta'mirlash", "Qulf o'rnatish", "Furnitura almashtirish"],
+  "Suv tozalash": ["Suv filtri o'rnatish", "Filtr almashtirish", "Suv yumshatgich", "Osmoz tizimi", "Suv tekshirish", "Texnik xizmat"],
+  "Kamera o'rnatish": ["CCTV kamera", "IP kamera", "Wifi kamera", "DVR/NVR o'rnatish", "Kabel tortish", "Kamera ta'mirlash"],
+  "Devor qog'ozi": ["Oboi yopish", "Vinil oboi", "Flizelin oboi", "Fotooboi", "Eski oboi yechish", "Devor tayyorlash"],
+  "Parda o'rnatish": ["Parda krepleni", "Shtora o'rnatish", "Jaluzlar", "Roletka", "Karniz o'rnatish", "Parda tikish"],
+  "Loyiha va smeta": ["Loyiha tuzish", "Smeta hisoblash", "3D vizualizatsiya", "Arxitektura", "Dizayn loyiha", "Texnik nazorat"],
+  "Kalit usta": ["Qulf ochish", "Qulf almashtirish", "Kalit yasash", "Avtomobil qulfi", "Eshik qulfi", "Seyf ochish"],
+  "Dezinfeksiya": ["Hasharot yo'qotish", "Sichqon yo'qotish", "Tarakan yo'qotish", "Virusga qarshi", "Bug' dezinfeksiya", "Profilaktika"],
+  "Mebel yig'ish": ["Shkaf yig'ish", "Krovat yig'ish", "Oshxona mebeli", "Ofis mebeli", "Mebel ta'mirlash", "Mebel demontaji"],
+  "Ko'chirish": ["Uy ko'chirish", "Ofis ko'chirish", "Yuk tashish", "Mebel ko'chirish", "Qadoqlash", "Yuk ortish"],
+  "Lift ta'mirlash": ["Lift montaji", "Lift ta'mirlash", "Texnik xizmat", "Lift modernizatsiya", "Ehtiyot qismlar", "Shoshilinch ta'mir"],
+  "Internet va tarmoq": ["Wifi o'rnatish", "Tarmoq sozlash", "Kabel tortish", "Router o'rnatish", "Server sozlash", "Tarmoq ta'mirlash"],
+  "Kompyuter ta'mirlash": ["Kompyuter ta'mirlash", "Dastur o'rnatish", "Virus tozalash", "Qattiq disk almashtirish", "RAM kengaytirish", "Ekran ta'mir"],
+  "Telefon ta'mirlash": ["Ekran almashtirish", "Batareya almashtirish", "Dasturiy ta'mir", "Suv tushgan telefon", "Kamera ta'mir", "Zaryadka port"],
+  "Avtomobil ta'mirlash": ["Motor ta'mirlash", "Tormoz tizimi", "Moy almashtirish", "Elektr tizimi", "Kuzov ta'mirlash", "Diagnostika"],
+  "Bog' ishlari": ["Daraxt kesish", "Gazon o'rnatish", "Gul ekish", "Sug'orish tizimi", "Landshaft dizayn", "Bog' tozalash"],
 };
 
 export default function CategoryDetailPage() {
