@@ -12,8 +12,6 @@ export const metadata: Metadata = {
   title: "Online Usta",
   description: "Usta topish va xizmat buyurtma qilish platformasi",
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
     apple: "/logo.png",
   },
 };
