@@ -72,6 +72,7 @@ enum NotificationType {
     PENALTY_ISSUED
     ACCOUNT_BLOCKED
     SYSTEM_MESSAGE
+    ROLE_CHANGED
 }
 
 enum ComplaintStatus {

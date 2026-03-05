@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import { Search, ShieldBan, ShieldCheck, UserCircle, ChevronRight } from "lucide-react";
+import { Search, ShieldBan, ShieldCheck, UserCircle, ChevronRight, Shield, Crown, UserCog } from "lucide-react";
 
 export default function AdminUsersPage() {
   const router = useRouter();
@@ -14,6 +14,8 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState("");
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState<any>({});
+  const [roleChanging, setRoleChanging] = useState<string | null>(null);
+  const [roleModal, setRoleModal] = useState<{ user: any; open: boolean }>({ user: null, open: false });
 
   const fetchUsers = (p = 1) => {
     setLoading(true);
@@ -40,6 +42,20 @@ export default function AdminUsersPage() {
   const handleUnblock = async (id: string) => {
     try { await api.patch(`/admin/users/${id}/unblock`); toast.success("Blokdan chiqarildi"); fetchUsers(page); }
     catch (err: any) { toast.error(err?.response?.data?.message || "Xatolik"); }
+  };
+
+  const handleChangeRole = async (userId: string, newRole: string) => {
+    setRoleChanging(userId);
+    try {
+      await api.patch(`/admin/users/${userId}/role`, { role: newRole });
+      toast.success(`Rol ${newRole} ga o'zgartirildi`);
+      fetchUsers(page);
+      setRoleModal({ user: null, open: false });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Rol o'zgartirishda xatolik");
+    } finally {
+      setRoleChanging(null);
+    }
   };
 
   return (
@@ -100,6 +116,11 @@ export default function AdminUsersPage() {
                     <td className="px-4 py-3 text-gray-500 dark:text-gray-400 text-xs">{new Date(u.createdAt).toLocaleDateString("uz")}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        {u.role !== "ADMIN" && (
+                          <button onClick={(e) => { e.stopPropagation(); setRoleModal({ user: u, open: true }); }} title="Rolni o'zgartirish" className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 font-medium">
+                            <UserCog className="w-3.5 h-3.5" />Rol
+                          </button>
+                        )}
                         {u.role !== "ADMIN" && (u.status === "ACTIVE" ? (
                           <button onClick={(e) => { e.stopPropagation(); handleBlock(u.id); }} className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 font-medium"><ShieldBan className="w-3.5 h-3.5" />Bloklash</button>
                         ) : u.status === "BLOCKED" ? (
@@ -124,6 +145,77 @@ export default function AdminUsersPage() {
             </div>
           )}
         </>
+      )}
+
+      {/* Role Change Modal */}
+      {roleModal.open && roleModal.user && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setRoleModal({ user: null, open: false })}>
+          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 border border-gray-200 dark:border-gray-700" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                <UserCog className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 dark:text-white">Rolni o&apos;zgartirish</h3>
+                <p className="text-sm text-gray-500">{roleModal.user.name || roleModal.user.phone}</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Hozirgi rol: <span className="font-semibold text-gray-700 dark:text-gray-300">{roleModal.user.role}</span></p>
+
+            <div className="space-y-2">
+              {[
+                { role: "USER", label: "Foydalanuvchi", desc: "Oddiy foydalanuvchi", icon: UserCircle, color: "gray" },
+                { role: "MASTER", label: "Usta", desc: "Xizmat ko'rsatuvchi usta", icon: Shield, color: "blue" },
+                { role: "ADMIN", label: "Administrator", desc: "To'liq boshqaruv huquqi", icon: Crown, color: "purple" },
+              ].map((item) => {
+                const isActive = roleModal.user.role === item.role;
+                const Icon = item.icon;
+                const colorMap: Record<string, string> = {
+                  gray: "border-gray-200 dark:border-gray-700 hover:border-gray-400",
+                  blue: "border-blue-200 dark:border-blue-800 hover:border-blue-500",
+                  purple: "border-purple-200 dark:border-purple-800 hover:border-purple-500",
+                };
+                const activeColorMap: Record<string, string> = {
+                  gray: "border-gray-500 bg-gray-50 dark:bg-gray-800",
+                  blue: "border-blue-500 bg-blue-50 dark:bg-blue-900/20",
+                  purple: "border-purple-500 bg-purple-50 dark:bg-purple-900/20",
+                };
+                const iconColorMap: Record<string, string> = {
+                  gray: "text-gray-500",
+                  blue: "text-blue-600 dark:text-blue-400",
+                  purple: "text-purple-600 dark:text-purple-400",
+                };
+                return (
+                  <button
+                    key={item.role}
+                    disabled={isActive || roleChanging === roleModal.user.id}
+                    onClick={() => {
+                      if (item.role === "ADMIN" && !confirm(`${roleModal.user.name || roleModal.user.phone} ni ADMIN qilmoqchimisiz? Bu to'liq boshqaruv huquqini beradi!`)) return;
+                      handleChangeRole(roleModal.user.id, item.role);
+                    }}
+                    className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition text-left ${isActive ? activeColorMap[item.color] : colorMap[item.color]} ${isActive ? "cursor-default" : "cursor-pointer"} disabled:opacity-60`}
+                  >
+                    <Icon className={`w-5 h-5 ${iconColorMap[item.color]}`} />
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.label}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{item.desc}</p>
+                    </div>
+                    {isActive && <span className="text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded-full font-medium">Hozirgi</span>}
+                    {roleChanging === roleModal.user.id && <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => setRoleModal({ user: null, open: false })}
+              className="w-full mt-4 py-2.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition font-medium"
+            >
+              Bekor qilish
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

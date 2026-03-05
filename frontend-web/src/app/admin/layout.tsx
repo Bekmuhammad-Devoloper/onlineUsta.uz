@@ -24,7 +24,7 @@ const navItems = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
@@ -32,9 +32,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    if (loading) return; // Profil hali yuklanmoqda
     if (!token) { router.replace("/auth/login"); return; }
     if (user && user.role !== "ADMIN") { router.replace("/"); return; }
-  }, [token, user, router]);
+  }, [token, user, router, loading]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-950">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-gray-500 dark:text-gray-400">Yuklanmoqda...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!token) return null;
 

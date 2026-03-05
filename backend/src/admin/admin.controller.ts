@@ -105,6 +105,15 @@ export class AdminController {
     return this.adminService.unblockUser(id);
   }
 
+  @Patch('users/:id/role')
+  @ApiOperation({ summary: 'Foydalanuvchi rolini o\'zgartirish' })
+  async changeUserRole(
+    @Param('id') id: string,
+    @Body() dto: { role: string },
+  ) {
+    return this.adminService.changeUserRole(id, dto.role);
+  }
+
   @Get('users/:id')
   @ApiOperation({ summary: 'Foydalanuvchi batafsil ma\'lumoti' })
   async getUserById(@Param('id') id: string) {

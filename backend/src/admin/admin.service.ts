@@ -454,6 +454,61 @@ export class AdminService {
     return user;
   }
 
+  // ==================== CHANGE USER ROLE ====================
+
+  async changeUserRole(userId: string, role: string) {
+    const validRoles = ['USER', 'MASTER', 'ADMIN'];
+    if (!validRoles.includes(role)) {
+      throw new Error('Noto\'g\'ri rol: ' + role);
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error('Foydalanuvchi topilmadi');
+    }
+
+    const oldRole = user.role;
+
+    // Update user role
+    const updated = await this.prisma.user.update({
+      where: { id: userId },
+      data: { role: role as any },
+    });
+
+    // If changing to MASTER, create a Master profile if doesn't exist
+    if (role === 'MASTER') {
+      const existingMaster = await this.prisma.master.findUnique({
+        where: { userId },
+      });
+      if (!existingMaster) {
+        await this.prisma.master.create({
+          data: {
+            userId,
+            isVerified: false,
+            isOnline: false,
+          },
+        });
+      }
+    }
+
+    // Send notification
+    const roleLabels: Record<string, string> = {
+      USER: 'Foydalanuvchi',
+      MASTER: 'Usta',
+      ADMIN: 'Administrator',
+    };
+
+    await this.notifications.create({
+      userId,
+      title: 'Rol o\'zgartirildi',
+      body: `Sizning rolingiz ${roleLabels[oldRole] || oldRole} dan ${roleLabels[role] || role} ga o'zgartirildi`,
+      type: 'ROLE_CHANGED',
+      data: { oldRole, newRole: role },
+    });
+
+    return updated;
+  }
+
   // ==================== ORDERS MANAGEMENT ====================
 
   async getOrders(params?: {
