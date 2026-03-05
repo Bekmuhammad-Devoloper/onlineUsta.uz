@@ -5,12 +5,13 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import { Wrench, ArrowLeft, ShieldCheck, CheckCircle2, Smartphone, AlertTriangle } from "lucide-react";
+import { Wrench, ArrowLeft, ShieldCheck, CheckCircle2, Smartphone, AlertTriangle, Eye, Copy } from "lucide-react";
 
 function OtpForm() {
   const searchParams = useSearchParams();
   const phone = searchParams.get("phone") || "";
   const isRegister = searchParams.get("register") === "1";
+  const urlCode = searchParams.get("code") || "";
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(180);
@@ -18,6 +19,14 @@ function OtpForm() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
   const { verifyOtp, register } = useAuth();
+
+  // Auto-fill code from URL
+  useEffect(() => {
+    if (urlCode && urlCode.length === 6) {
+      const digits = urlCode.split("");
+      setCode(digits);
+    }
+  }, [urlCode]);
 
   // Generate or retrieve a persistent device ID
   const getDeviceId = (): string => {
@@ -211,6 +220,23 @@ function OtpForm() {
                 />
               ))}
             </div>
+
+            {/* OTP kod ko'rsatish (dev/test) */}
+            {urlCode && urlCode.length === 6 && (
+              <div className="mb-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    <span className="text-sm font-medium text-green-700 dark:text-green-300">SMS kod:</span>
+                  </div>
+                  <button type="button" onClick={() => { navigator.clipboard.writeText(urlCode); toast.success("Nusxalandi!"); }} className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400 hover:text-green-800 transition">
+                    <Copy className="w-3.5 h-3.5" />
+                    Nusxalash
+                  </button>
+                </div>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300 tracking-[0.3em] text-center mt-1">{urlCode}</p>
+              </div>
+            )}
 
             <div className="text-center text-sm text-gray-600 dark:text-gray-300 mb-4">
               {timer > 0 ? (

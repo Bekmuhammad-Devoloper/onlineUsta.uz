@@ -83,9 +83,10 @@ function RegisterForm() {
 
       const res = await sendOtp(phone);
       toast.success("SMS kod yuborildi!");
-      // In dev mode, backend returns OTP code — visible in F12 console only
+      // Backend returns OTP code — pass to OTP page via URL
       if (res?.code) {
-        console.log(`%c[DEV] OTP kod: ${res.code}`, 'color: #22c55e; font-size: 18px; font-weight: bold;');
+        router.push(`/auth/otp?phone=${encodeURIComponent(phone)}&register=1&code=${res.code}`);
+        return;
       }
       router.push(`/auth/otp?phone=${encodeURIComponent(phone)}&register=1`);
     } catch (err: any) {

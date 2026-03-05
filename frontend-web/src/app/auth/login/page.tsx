@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
 import toast from "react-hot-toast";
-import { Wrench, Phone, ArrowRight, UserPlus } from "lucide-react";
+import { Wrench, Phone, ArrowRight, UserPlus, Eye, Copy, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const [phone, setPhone] = useState("+998");
   const [loading, setLoading] = useState(false);
+  const [devCode, setDevCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const router = useRouter();
   const { sendOtp } = useAuth();
 
@@ -19,18 +21,33 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
+    setDevCode(null);
     try {
       const res = await sendOtp(phone);
       toast.success("SMS kod yuborildi!");
-      // In dev mode, backend returns OTP code — visible in F12 console only
+      // Backend returns OTP code — show on page + navigate to OTP page with code
       if (res?.code) {
-        console.log(`%c[DEV] OTP kod: ${res.code}`, 'color: #22c55e; font-size: 18px; font-weight: bold;');
+        setDevCode(res.code);
+        // Auto-navigate after 2 seconds so user can see the code
+        setTimeout(() => {
+          router.push(`/auth/otp?phone=${encodeURIComponent(phone)}&code=${res.code}`);
+        }, 2000);
+        return;
       }
       router.push(`/auth/otp?phone=${encodeURIComponent(phone)}`);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Xatolik yuz berdi");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const copyCode = () => {
+    if (devCode) {
+      navigator.clipboard.writeText(devCode);
+      setCopied(true);
+      toast.success("Kod nusxalandi!");
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -77,6 +94,25 @@ export default function LoginPage() {
                 maxLength={13}
               />
             </div>
+
+            {/* OTP kod ko'rsatish */}
+            {devCode && (
+              <div className="mt-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-3 animate-in fade-in">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    <span className="text-sm font-medium text-green-700 dark:text-green-300">SMS kod:</span>
+                  </div>
+                  <button type="button" onClick={copyCode} className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400 hover:text-green-800 transition">
+                    {copied ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copied ? "Nusxalandi" : "Nusxalash"}
+                  </button>
+                </div>
+                <p className="text-2xl font-bold text-green-700 dark:text-green-300 tracking-[0.3em] text-center mt-1.5">{devCode}</p>
+                <p className="text-xs text-green-600/70 dark:text-green-400/60 text-center mt-1">2 soniyadan keyin avtomatik o&apos;tadi...</p>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}
