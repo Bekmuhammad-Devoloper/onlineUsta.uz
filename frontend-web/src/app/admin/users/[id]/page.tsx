@@ -1,15 +1,24 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import {
   ArrowLeft, Phone, MapPin, Calendar, ShieldBan, ShieldCheck,
   Star, ClipboardList, CheckCircle2, XCircle, Bell, Clock,
   UserCircle, Wrench, Package, Wifi, WifiOff, Eye,
-  TrendingUp, Hash, ChevronRight,
+  TrendingUp, Hash, ChevronRight, Navigation,
 } from "lucide-react";
+
+delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
 
 const roleBadge: Record<string, string> = {
   ADMIN: "bg-white/20 text-white border border-white/30",
@@ -42,11 +51,54 @@ export default function AdminUserDetailPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const mapRef = useRef<L.Map | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!id) return;
     api.get(`/admin/users/${id}`).then(r => setUser(r.data)).catch(() => toast.error("Foydalanuvchi topilmadi")).finally(() => setLoading(false));
   }, [id]);
+
+  // Init map when user data loaded
+  useEffect(() => {
+    if (!user || !mapContainerRef.current || mapRef.current) return;
+    const lat = user.latitude;
+    const lon = user.longitude;
+    if (!lat || !lon) return;
+
+    const map = L.map(mapContainerRef.current, { zoomControl: false }).setView([lat, lon], 15);
+    L.control.zoom({ position: "bottomright" }).addTo(map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const avatarUrl = user.avatar;
+    const userIcon = L.divIcon({
+      className: "",
+      html: avatarUrl
+        ? `<div style="width:44px;height:44px;border-radius:50%;border:3px solid #2563EB;box-shadow:0 2px 10px rgba(37,99,235,0.4);overflow:hidden;background:white;">
+            <img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" />
+          </div>`
+        : `<div style="width:44px;height:44px;border-radius:50%;background:#2563EB;border:3px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>`,
+      iconSize: [44, 44],
+      iconAnchor: [22, 22],
+    });
+
+    const marker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+    marker.bindPopup(`<b>${user.name || "Foydalanuvchi"}</b><br/>${user.location || ""}`);
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, [user]);
 
   const handleBlock = async () => {
     if (!confirm("Bloklashni tasdiqlaysizmi?")) return;
@@ -191,6 +243,20 @@ export default function AdminUserDetailPage() {
           <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wider font-medium">Bajarish %</p>
         </div>
       </div>
+
+      {/* LOCATION MAP */}
+      {(user.latitude && user.longitude) && (
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+          <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+            <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2 text-sm">
+              <div className="w-7 h-7 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center"><Navigation className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /></div>
+              Oxirgi manzil
+            </h3>
+            <span className="text-xs text-gray-400">{user.location || ""}</span>
+          </div>
+          <div ref={mapContainerRef} className="h-64 sm:h-80 w-full z-0" />
+        </div>
+      )}
 
       {/* TWO-COLUMN: Master info + Orders */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
