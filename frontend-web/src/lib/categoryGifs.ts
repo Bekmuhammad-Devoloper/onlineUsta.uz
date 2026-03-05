@@ -1,46 +1,51 @@
 // Kategoriya nomiga mos GIF icon mapping
 // Public papkadagi GIF fayllar bilan kategoriyalarni bog'lash
+// Har bir kategoriyaga o'ziga xos (unique) animatsiyali icon
+// Freepik.com dan animated iconlar yuklab olingan
 
 const categoryGifs: Record<string, string> = {
-  "Santexnika": "/plumber.gif",
-  "Elektrik": "/electric.gif",
-  "Duradgor": "/carpentry.gif",
-  "Konditsioner": "/air-conditioner.gif",
-  "Qurilish": "/encryption.gif",
-  "Bo'yoqchi": "/paint-roller.gif",
-  "Gazchi": "/gas worker.gif",
-  "Uy ta'mirlash": "/home repair.gif",
-  "Deraza o'rnatish": "/window installation.gif",
-  "Tom yopish": "/roofing.gif",
-  "Plitka yotqizish": "/laying tiles.gif",
-  "Gipsokarton": "/plasterboard.gif",
-  "Suvoq ishlari": "/trowel.gif",
-  "Pol yotqizish": "/floor laying.gif",
-  "Issiqlik tizimi": "/heating system.gif",
-  "Eshik o'rnatish": "/carpentry.gif",
-  "Suv tozalash": "/water purification.gif",
-  "Kamera o'rnatish": "/camera installation.gif",
-  "Devor qog'ozi": "/wallpaper.gif",
-  "Parda o'rnatish": "/curtain installation.gif",
-  "Payvandlash": "/welding.gif",
-  "Loyiha va smeta": "/project and estimate.gif",
-  "Hovuz qurilishi": "/pool pennies.gif",
-  "Maishiy texnika": "/home-appliance.gif",
-  "Tozalash": "/cleaning.gif",
-  "Kalit usta": "/encryption.gif",
-  "Dezinfeksiya": "/cleaning.gif",
-  "Mebel yig'ish": "/carpentry.gif",
-  "Ko'chirish": "/home repair.gif",
-  "Lift ta'mirlash": "/home repair.gif",
-  "Internet va tarmoq": "/camera installation.gif",
-  "Kompyuter ta'mirlash": "/home-appliance.gif",
-  "Telefon ta'mirlash": "/home-appliance.gif",
-  "Avtomobil ta'mirlash": "/home repair.gif",
-  "Bog' ishlari": "/cleaning.gif",
+  // --- Mavjud GIF fayllar (o'zgartirilmagan) ---
+  "Santexnika": "/icons/plumber.gif",
+  "Elektrik": "/icons/electric.gif",
+  "Duradgor": "/icons/carpentry.gif",
+  "Konditsioner": "/icons/air-conditioner.gif",
+  "Bo'yoqchi": "/icons/paint-roller.gif",
+  "Gazchi": "/icons/gas-worker.gif",
+  "Uy ta'mirlash": "/icons/home-repair.gif",
+  "Deraza o'rnatish": "/icons/window-installation.gif",
+  "Tom yopish": "/icons/roofing.gif",
+  "Plitka yotqizish": "/icons/laying-tiles.gif",
+  "Gipsokarton": "/icons/plasterboard.gif",
+  "Suvoq ishlari": "/icons/trowel.gif",
+  "Pol yotqizish": "/icons/floor-laying.gif",
+  "Issiqlik tizimi": "/icons/heating-system.gif",
+  "Suv tozalash": "/icons/water-purification.gif",
+  "Kamera o'rnatish": "/icons/camera-installation.gif",
+  "Devor qog'ozi": "/icons/wallpaper.gif",
+  "Parda o'rnatish": "/icons/curtain-installation.gif",
+  "Payvandlash": "/icons/welding.gif",
+  "Loyiha va smeta": "/icons/project-estimate.gif",
+  "Hovuz qurilishi": "/icons/pool.gif",
+  "Maishiy texnika": "/icons/home-appliance.gif",
+  "Tozalash": "/icons/cleaning.gif",
+
+  // --- Yangi unique GIF fayllar (dublikat bo'lganlar o'rniga) ---
+  "Qurilish": "/icons/construction.gif",           // Avval: encryption.gif (dublikat)
+  "Eshik o'rnatish": "/icons/door.gif",             // Avval: carpentry.gif (dublikat)
+  "Kalit usta": "/icons/key.gif",                   // Avval: encryption.gif (dublikat)
+  "Dezinfeksiya": "/icons/disinfection.gif",         // Avval: cleaning.gif (dublikat)
+  "Mebel yig'ish": "/icons/furniture.gif",           // Avval: carpentry.gif (dublikat)
+  "Ko'chirish": "/icons/moving-truck.gif",           // Avval: home repair.gif (dublikat)
+  "Lift ta'mirlash": "/icons/elevator.gif",          // Avval: home repair.gif (dublikat)
+  "Internet va tarmoq": "/icons/wifi-network.gif",   // Avval: camera installation.gif (dublikat)
+  "Kompyuter ta'mirlash": "/icons/computer-repair.gif", // Avval: home-appliance.gif (dublikat)
+  "Telefon ta'mirlash": "/icons/phone-repair.gif",   // Avval: home-appliance.gif (dublikat)
+  "Avtomobil ta'mirlash": "/icons/car-repair.gif",   // Avval: home repair.gif (dublikat)
+  "Bog' ishlari": "/icons/gardening.gif",            // Avval: cleaning.gif (dublikat)
 };
 
 export function getCategoryGif(name: string): string {
-  return categoryGifs[name] || "/home repair.gif";
+  return categoryGifs[name] || "/icons/home-repair.gif";
 }
 
 export default categoryGifs;

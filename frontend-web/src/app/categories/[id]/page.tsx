@@ -176,10 +176,10 @@ export default function CategoryDetailPage() {
               {services.map((s, i) => (
                 <div
                   key={i}
-                  className={`flex items-center gap-2 ${color.light} rounded-xl px-3 py-2.5 border border-gray-100 dark:border-gray-800`}
+                  className="flex items-center gap-2 bg-white dark:bg-gray-800/80 rounded-xl px-3 py-2.5 border border-gray-200 dark:border-gray-700"
                 >
                   <CheckCircle2 className={`w-4 h-4 ${color.text} flex-shrink-0`} />
-                  <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">{s}</span>
+                  <span className="text-sm text-gray-800 dark:text-gray-100 font-medium">{s}</span>
                 </div>
               ))}
             </div>
@@ -255,18 +255,18 @@ export default function CategoryDetailPage() {
                               className={`w-3.5 h-3.5 ${
                                 i < Math.round(m.rating)
                                   ? "text-yellow-400 fill-yellow-400"
-                                  : "text-gray-200"
+                                  : "text-gray-200 dark:text-gray-600"
                               }`}
                             />
                           ))}
                         </div>
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{m.rating.toFixed(1)}</span>
-                        <span className="text-xs text-gray-400">({m.totalReviews} baho)</span>
+                        <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{m.rating.toFixed(1)}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">({m.totalReviews} baho)</span>
                       </div>
 
                       {/* Location */}
                       {m.user.location && (
-                        <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
+                        <div className="flex items-center gap-1 mt-1 text-xs text-gray-500 dark:text-gray-400">
                           <MapPin className="w-3 h-3" />
                           {m.user.location}
                         </div>
@@ -274,7 +274,7 @@ export default function CategoryDetailPage() {
 
                       {/* Bio */}
                       {m.bio && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5 line-clamp-1">{m.bio}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1.5 line-clamp-1">{m.bio}</p>
                       )}
 
                       {/* Services tags */}
@@ -283,13 +283,13 @@ export default function CategoryDetailPage() {
                           {m.services.slice(0, 3).map((s, i) => (
                             <span
                               key={i}
-                              className={`${color.light} ${color.text} text-xs px-2 py-0.5 rounded-full font-medium`}
+                              className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full font-medium border border-blue-200 dark:border-blue-800"
                             >
                               {s}
                             </span>
                           ))}
                           {m.services.length > 3 && (
-                            <span className="text-xs text-gray-400 px-1">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 px-1">
                               +{m.services.length - 3}
                             </span>
                           )}
